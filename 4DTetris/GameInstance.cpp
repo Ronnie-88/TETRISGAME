@@ -7,21 +7,18 @@
 #include <iostream>
 
 
-#define BOARD_WIDTH 500
-#define BOARD_HIEGHT 415
+#define SCREEN_WIDTH 500
+#define SCREEN_HIEGHT 415
 
 class GameInstance: public olc::PixelGameEngine
 {
     int* Grid;
-    //int* IBlock;
-    
-    //FileReader* IBlockfileReader = nullptr;
+ 
     Tetramino* tetraminoIblock = nullptr;
 
     olc::Sprite* sprTile;
     olc::Decal* TetrisBlockDecal;
     olc::vi2d vTetrisBlockSize = {7,7};
-    //const olc::vi2d ScreenSize = {512, 415};
 
 public:
     GameInstance()
@@ -100,7 +97,7 @@ public:
 
     }
 
-    void RotateLeftTetramino(int* blockArr, int arraySize)
+    void RotateTetraminoRight(int* blockArr, int arraySize)
     {
         int N = (int)sqrt(arraySize);
         for (unsigned int i = 0; i < N; i++)
@@ -131,9 +128,7 @@ public:
     bool OnUserCreate() override
     {
         Grid = new int[50 * 50];
-        //IBlock = new int[5 * 5];
     
-        //IBlockfileReader = new FileReader("I-Block.txt");
         sprTile = new olc::Sprite("TetrisBlock.png");
         TetrisBlockDecal = new olc::Decal(sprTile);
         tetraminoIblock = new Tetramino("I-Block.txt", {35,10});
@@ -150,16 +145,21 @@ public:
                 }
             }
         }
-
-        //IBlockfileReader->AddCoordsToBlock(IBlock, 5 * 5); 
+        
         return true;
     }
     bool OnUserUpdate(float fElapsedTime) override
     {
         Clear(olc::DARK_CYAN);
         drawGrid(Grid, 50);
-        //drawTetramino(IBlock, 5, 25); 
+        
         tetraminoIblock->DrawTertramino(this, TetrisBlockDecal);
+        tetraminoIblock->MoveTetraminoDown(fElapsedTime);
+        tetraminoIblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed);
+        tetraminoIblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed);
+        tetraminoIblock->RotateTetraminoRight(GetKey(olc::UP).bPressed);
+        tetraminoIblock->IncreaseTetraminoVerticalVelocity(GetKey(olc::DOWN).bHeld);
+        
         if (GetKey(olc::D).bPressed)
         {
             //RotateRightTetramino(IBlock, 5 * 5);
@@ -180,7 +180,7 @@ int main()
 {
     GameInstance Gi;
 
-    if (Gi.Construct(BOARD_WIDTH, BOARD_HIEGHT,2,2))
+    if (Gi.Construct(SCREEN_WIDTH, SCREEN_HIEGHT,2,2))
     {
         Gi.Start();
     }
