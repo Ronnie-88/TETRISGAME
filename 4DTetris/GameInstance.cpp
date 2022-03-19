@@ -19,6 +19,9 @@ class GameInstance: public olc::PixelGameEngine
     olc::Sprite* sprTile;
     olc::Decal* TetrisBlockDecal;
     olc::vi2d vTetrisBlockSize = {7,7};
+    olc::vi2d vGridPos = {20,0};
+    int gridWidth = 29;
+    int gridHeight = 50;
 
 public:
     GameInstance()
@@ -35,113 +38,47 @@ public:
     }
 public:
 
-    void drawGrid(int* arr, int gridSize)
+    void drawGrid(int* arr, int gridSizeX, int gridSizeY)
     {
-        for (int y = 0; y < gridSize; y++)
+        for (int y = 0; y < gridSizeY; y++)
         {
-            for (int x = 0; x < gridSize; x++)
+            for (int x = 0; x < gridSizeX; x++)
             {
-                switch (arr[y * gridSize + x])
+                switch (arr[y * gridSizeX + x])
                 {
                 case 0:
                     break;
+                case 1:
+                    DrawDecal(olc::vi2d(vGridPos.x+x, vGridPos.y+y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f });
                 case 10:
-                    DrawDecal(olc::vi2d(x, y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f }, olc::BLACK);
+                    DrawDecal(olc::vi2d(vGridPos.x + x, vGridPos.y + y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f }, olc::BLACK);
                     break;
                 }
 
             }
         }
     }
-    /*void drawTetramino(int* arr, int N, int offset)
-    {
-        for (int y = 0; y < N; y++)
-        {
-            for (int x = 0;  x < N; x++)
-            {
-                switch (arr[y * N + x])
-                {
-                case 0:
-                    break;
-                case 5:
-                    DrawDecal(olc::vi2d(x, y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f });
-                    break;
-                }
-                
-            }
-        }
-    }*/
-    void RotateRightTetramino(int* blockArr, int arraySize)
-    {
-        int N = (int)sqrt(arraySize);
 
-        for (unsigned int i = 0; i < N; i++)
-        {
-            for(unsigned int j = i+1; j < N; j++)
-            {
-                int temp = blockArr[i * N + j];
-                blockArr[i * N + j] = blockArr[j * N + i];
-                blockArr[j * N + i] = temp;
-            }
-        }
 
-        for (unsigned int i = 0; i < N; i++)
-        {
-            for (unsigned int j = 0; j < N/2; j++)
-            {
-                int temp = blockArr[i * N + j];
-                blockArr[i * N + j] = blockArr[i * N + (N - 1 - j)];
-                blockArr[i * N + (N - 1 - j)] = temp;
-            }
-        }
-
-    }
-
-    void RotateTetraminoRight(int* blockArr, int arraySize)
-    {
-        int N = (int)sqrt(arraySize);
-        for (unsigned int i = 0; i < N; i++)
-        {
-            for (unsigned int j = 0; j < N/2 ; j++)
-            {
-                int temp = blockArr[i * N + j];
-                blockArr[i * N + j] = blockArr[i * N + (N - 1 - j)];
-                blockArr[i * N + (N - 1 - j)] = temp;
-            }
-        }
-
-        for (unsigned int i = 0; i < N; i++)
-        {
-            for (unsigned int j = i + 1; j < N; j++)
-            {
-                int temp = blockArr[i * N + j];
-                blockArr[i * N + j] = blockArr[j * N + i];
-                blockArr[j * N + i] = temp;
-            }
-        }
-    }
-
-    void MoveBlockDown()
-    {
-    }
 
     bool OnUserCreate() override
     {
-        Grid = new int[50 * 50];
+        Grid = new int[gridWidth * gridHeight];
     
         sprTile = new olc::Sprite("TetrisBlock.png");
         TetrisBlockDecal = new olc::Decal(sprTile);
         tetraminoIblock = new Tetramino("I-Block.txt", {35,10});
-        for ( int y = 0; y < 50; y++)
+
+        for ( int y = 0; y < gridHeight; y++)
         {
-            for (int x = 0; x < 50; x++)
+            for (int x = 0; x < gridWidth; x++)
             {
-                if (x == 20 || x == 49 || (y == 49 && x > 20))
+                if (x == 0 || x == (gridWidth-1) || (y == (gridHeight-1) && x < (gridWidth - 1)))
                 {
-                    Grid[y * 50 + x] = 10;
+                    Grid[y * gridWidth + x] = 10;
                 }else
                 {
-                    Grid[y * 50 + x] = 0;
+                    Grid[y * gridWidth + x] = 0;
                 }
             }
         }
@@ -151,24 +88,19 @@ public:
     bool OnUserUpdate(float fElapsedTime) override
     {
         Clear(olc::DARK_CYAN);
-        drawGrid(Grid, 50);
+        drawGrid(Grid, gridWidth, gridHeight);
         
         tetraminoIblock->DrawTertramino(this, TetrisBlockDecal);
+        tetraminoIblock->DetectBottom(gridHeight);
+        tetraminoIblock->DetectSideLeft(gridWidth, vGridPos);
+        tetraminoIblock->DetectSideRight(gridWidth, vGridPos);
         tetraminoIblock->MoveTetraminoDown(fElapsedTime);
         tetraminoIblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed);
         tetraminoIblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed);
         tetraminoIblock->RotateTetraminoRight(GetKey(olc::UP).bPressed);
         tetraminoIblock->IncreaseTetraminoVerticalVelocity(GetKey(olc::DOWN).bHeld);
         
-        if (GetKey(olc::D).bPressed)
-        {
-            //RotateRightTetramino(IBlock, 5 * 5);
-        }
-
-        if (GetKey(olc::A).bPressed)
-        {
-            //RotateLeftTetramino(IBlock, 5 * 5);
-        }
+     
         return true;
     }
 

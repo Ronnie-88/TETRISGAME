@@ -41,6 +41,8 @@ const olc::vi2d& Tetramino::GetCurrentTetraminoPos()
 
 void Tetramino::MoveTetraminoDown(const float& fElapsedTime)
 {
+    if (!bCanTetraminoBlockMoveDown) { return; }
+
     if (fCurrentWaitTime <= fMaxWaitTime)
     {
         fCurrentWaitTime += fElapsedTime;
@@ -54,6 +56,7 @@ void Tetramino::MoveTetraminoDown(const float& fElapsedTime)
 
 void Tetramino::MoveTetraminoLeft(const bool& bButtonStatus)
 {
+    if (!bCanTetraminoBlockMoveLeft) { return; }
     if (bButtonStatus)
     {
         vCurrentTetraminoPos += vTetraminoHorizontalLeftVelocity;
@@ -62,6 +65,7 @@ void Tetramino::MoveTetraminoLeft(const bool& bButtonStatus)
 
 void Tetramino::MoveTetraminoRight(const bool& bButtonStatus)
 {
+    if (!bCanTetraminoBlockMoveRight) { return; }
     if (bButtonStatus)
     {
         vCurrentTetraminoPos += vTetraminoHorizontalRightVelocity;
@@ -88,6 +92,38 @@ void Tetramino::RotateTetraminoRight(const bool& bButtonStatus)
        SwapTetraminoBlocks();
     }
    
+}
+
+void Tetramino::DetectSideLeft(int gridWidth, olc::vi2d gridPos)
+{
+    if (vCurrentTetraminoPos.x*vTetrisBlockSize < gridPos.x*vTetrisBlockSize)
+    {
+        bCanTetraminoBlockMoveLeft = false;
+    }
+    else
+    {
+        bCanTetraminoBlockMoveLeft = true;
+    }
+}
+
+void Tetramino::DetectSideRight(int gridWidth, olc::vi2d gridPos)
+{
+    if ((vCurrentTetraminoPos.x + gridNSize)  > (gridPos.x + (gridWidth-1)))
+    {
+        bCanTetraminoBlockMoveRight = false;
+    }
+    else
+    {
+        bCanTetraminoBlockMoveRight = true;
+    }
+}
+
+void Tetramino::DetectBottom(int gridHeight)
+{
+    if ((vCurrentTetraminoPos.y+gridNSize) > gridHeight-2)
+    {
+        bCanTetraminoBlockMoveDown = false;
+    }
 }
 
 void Tetramino::TransposeTetraminoGrid()
