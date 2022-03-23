@@ -5,7 +5,7 @@
 class Tetramino
 {
 public://Tetramino construction
-	Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos);
+	Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos);
 	~Tetramino();
 
 public://Drawing routines
@@ -13,14 +13,16 @@ public://Drawing routines
 	const olc::vi2d& GetCurrentTetraminoPos();
 
 public://Movement routines
-	void MoveTetraminoDown(const float& fElapsedTime);
-	void MoveTetraminoLeft(const bool& bButtonStatus);
-	void MoveTetraminoRight(const bool& bButtonStatus);
+	void MoveTetraminoDown(const float& fElapsedTime, int* grid, int gridWidth, int gridHieght);
+	void MoveTetraminoLeft(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
+	void MoveTetraminoRight(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
 	void IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus);
 	void RotateTetraminoRight(const bool& bButtonStatus);
-	void DetectSideLeft(int gridWidth, olc::vi2d gridPos);
-	void DetectSideRight(int gridWidth, olc::vi2d gridPos);
+	//void DetectSideLeft(int gridWidth, olc::vi2d gridPos);
+	void DetectSideRight(int* grid,int gridWidth, int gridheight, olc::vi2d gridPos);
 	void DetectBottom(int gridHeight);
+
+	bool DoesBlockFit(const int* grid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity);
 
 
 private:
@@ -29,6 +31,7 @@ private:
 
 private:
 	olc::vi2d vCurrentTetraminoPos;
+	olc::vi2d vCurrentGridPos;
 	FileReader* tetraminoBlockType = nullptr;
 	int* tetraminoGrid = nullptr;
 	const unsigned int gridNSize = 4;

@@ -51,7 +51,7 @@ public:
                 case 1:
                     DrawDecal(olc::vi2d(vGridPos.x+x, vGridPos.y+y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f });
                 case 10:
-                    DrawDecal(olc::vi2d(vGridPos.x + x, vGridPos.y + y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f }, olc::BLACK);
+                    DrawDecal(olc::vi2d(vGridPos.x + x, vGridPos.y + y)*vTetrisBlockSize, TetrisBlockDecal, {0.025f,0.025f}, olc::BLACK);
                     break;
                 }
 
@@ -67,7 +67,7 @@ public:
     
         sprTile = new olc::Sprite("TetrisBlock.png");
         TetrisBlockDecal = new olc::Decal(sprTile);
-        tetraminoIblock = new Tetramino("I-Block.txt", {35,10});
+        tetraminoIblock = new Tetramino("I-Block.txt", { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
 
         for ( int y = 0; y < gridHeight; y++)
         {
@@ -91,12 +91,9 @@ public:
         drawGrid(Grid, gridWidth, gridHeight);
         
         tetraminoIblock->DrawTertramino(this, TetrisBlockDecal);
-        tetraminoIblock->DetectBottom(gridHeight);
-        tetraminoIblock->DetectSideLeft(gridWidth, vGridPos);
-        tetraminoIblock->DetectSideRight(gridWidth, vGridPos);
-        tetraminoIblock->MoveTetraminoDown(fElapsedTime);
-        tetraminoIblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed);
-        tetraminoIblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed);
+        tetraminoIblock->MoveTetraminoDown(fElapsedTime,Grid, gridWidth, gridHeight);
+        tetraminoIblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed,Grid,gridWidth,gridHeight);
+        tetraminoIblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed,Grid, gridWidth, gridHeight);
         tetraminoIblock->RotateTetraminoRight(GetKey(olc::UP).bPressed);
         tetraminoIblock->IncreaseTetraminoVerticalVelocity(GetKey(olc::DOWN).bHeld);
         
