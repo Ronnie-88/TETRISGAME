@@ -13,15 +13,17 @@
 class GameInstance: public olc::PixelGameEngine
 {
     int* Grid;
- 
-    Tetramino* tetraminoIblock = nullptr;
+    int Cleared = 0;
+    Tetramino* tetraminoCurrentblock = nullptr;
+    bool flag = true;
 
     olc::Sprite* sprTile;
     olc::Decal* TetrisBlockDecal;
     olc::vi2d vTetrisBlockSize = {7,7};
     olc::vi2d vGridPos = {20,0};
-    int gridWidth = 29;
-    int gridHeight = 50;
+    int gridWidth = 15;
+    int gridHeight = 35;
+    std::string blockTypes[4] = {"I-Block.txt","L-Block.txt", "O-Block.txt ", "Z-Block.txt"};
 
 public:
     GameInstance()
@@ -30,10 +32,15 @@ public:
     }
     ~ GameInstance()
     {
+        print();
         delete[] Grid;
         delete sprTile;
         delete TetrisBlockDecal;
-        delete tetraminoIblock;
+        if (tetraminoCurrentblock)
+        {
+          delete tetraminoCurrentblock;
+        }
+        
         std::cout << "GameClosed" << std::endl;
     }
 public:
@@ -49,7 +56,8 @@ public:
                 case 0:
                     break;
                 case 1:
-                    DrawDecal(olc::vi2d(vGridPos.x+x, vGridPos.y+y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f });
+                    DrawDecal(olc::vi2d(vGridPos.x+x, vGridPos.y+y) * vTetrisBlockSize, TetrisBlockDecal, { 0.025f,0.025f }, olc::GREEN);
+                    break;
                 case 10:
                     DrawDecal(olc::vi2d(vGridPos.x + x, vGridPos.y + y)*vTetrisBlockSize, TetrisBlockDecal, {0.025f,0.025f}, olc::BLACK);
                     break;
@@ -58,7 +66,106 @@ public:
             }
         }
     }
+    void CreateNewBlock()
+    {
+        int randomTetramino = rand() % 4;
+        
+        if (randomTetramino > 4)
+        {
+            randomTetramino = 0;
+        }
 
+        if (tetraminoCurrentblock && tetraminoCurrentblock->isLanded)
+        {
+            ClearALLFullRows();
+            delete tetraminoCurrentblock;
+            tetraminoCurrentblock = new Tetramino(blockTypes[randomTetramino], { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
+            //flag = false;
+        }
+    }
+
+    void ClearALLFullRows()
+    {
+        for (int y = gridHeight - 2; y >= 0; y--)
+        {
+            //if empty row then don't check
+            if (IsRowEmpty(y))
+            {
+                continue;
+            }
+            if (IsRowFilled(y))
+            {
+                Cleared++;
+                ClearRow(y);
+            }
+            else if (Cleared > 0)
+            {
+                MoveDown(y, Cleared);     
+            }
+        }
+        Cleared = 0;
+    }
+    bool IsRowEmpty(const int& currentRow)
+    {
+        for (int x = 1; x < gridWidth - 1; x++)
+        {
+            if (Grid[currentRow * (gridWidth)+x] != 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    void ClearRow(const int& currentRow)
+    {
+        for (int x = 1; x < gridWidth-1; x++)
+        {
+            Grid[currentRow * gridWidth + x] = 0;
+        }
+    }
+
+    void MoveDown(const int& currentRow,const int& numOfRowsCleared)
+    {
+        for (int x = 1; x < gridWidth-1; x++)
+        {
+            int temp = Grid[currentRow * gridWidth + x];
+            Grid[currentRow * gridWidth + x] = Grid[(currentRow + numOfRowsCleared) * gridWidth + x];
+            Grid[(currentRow + numOfRowsCleared) * gridWidth + x] = temp;
+        }
+    }
+
+    bool IsRowFilled(const int& currentRow)
+    {
+        for (int x = 1; x < gridWidth-1; x++)
+        {
+            //std::cout << currentRow * (gridWidth) + x;
+            //std::cout << "[" << Grid[currentRow * (gridWidth) + x]<<"] ";
+            //DebugPrintRow(currentRow);
+            if (Grid[currentRow * (gridWidth)+x] != 1)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    void DebugPrintRow(const int& row)
+    {
+        for (int x = 1; x < gridWidth - 1; x++)
+        {
+            std::cout << "[" << Grid[row * (gridWidth)+x] << "] ";
+        }
+    }
+    void print()
+    {
+        for (int y = 0;  y < gridHeight;  y++)
+        {
+            std::cout << "\n";
+            for (int x = 0; x < gridWidth; x++)
+            {
+                std::cout << "[" << Grid[y * gridWidth + x] << "] ";
+            }
+        }
+    }
 
 
     bool OnUserCreate() override
@@ -67,7 +174,7 @@ public:
     
         sprTile = new olc::Sprite("TetrisBlock.png");
         TetrisBlockDecal = new olc::Decal(sprTile);
-        tetraminoIblock = new Tetramino("I-Block.txt", { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
+        tetraminoCurrentblock = new Tetramino("Z-Block.txt", { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
 
         for ( int y = 0; y < gridHeight; y++)
         {
@@ -88,15 +195,22 @@ public:
     bool OnUserUpdate(float fElapsedTime) override
     {
         Clear(olc::DARK_CYAN);
+       
         drawGrid(Grid, gridWidth, gridHeight);
-        
-        tetraminoIblock->DrawTertramino(this, TetrisBlockDecal);
-        tetraminoIblock->MoveTetraminoDown(fElapsedTime,Grid, gridWidth, gridHeight);
-        tetraminoIblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed,Grid,gridWidth,gridHeight);
-        tetraminoIblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed,Grid, gridWidth, gridHeight);
-        tetraminoIblock->RotateTetraminoRight(GetKey(olc::UP).bPressed);
-        tetraminoIblock->IncreaseTetraminoVerticalVelocity(GetKey(olc::DOWN).bHeld);
-        
+        if (tetraminoCurrentblock)
+        {
+            tetraminoCurrentblock->DrawTertramino(this, TetrisBlockDecal);
+            tetraminoCurrentblock->MoveTetraminoDown(fElapsedTime, Grid, gridWidth, gridHeight);
+            tetraminoCurrentblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed, Grid, gridWidth, gridHeight);
+            tetraminoCurrentblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed, Grid, gridWidth, gridHeight);
+            tetraminoCurrentblock->RotateTetraminoRight(GetKey(olc::UP).bPressed);
+            tetraminoCurrentblock->IncreaseTetraminoVerticalVelocity(GetKey(olc::DOWN).bHeld);
+            CreateNewBlock();
+            if (GetKey(olc::Z).bPressed)
+            {
+                
+            }
+        }
      
         return true;
     }

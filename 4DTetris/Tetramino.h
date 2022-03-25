@@ -18,16 +18,14 @@ public://Movement routines
 	void MoveTetraminoRight(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
 	void IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus);
 	void RotateTetraminoRight(const bool& bButtonStatus);
-	//void DetectSideLeft(int gridWidth, olc::vi2d gridPos);
-	void DetectSideRight(int* grid,int gridWidth, int gridheight, olc::vi2d gridPos);
-	void DetectBottom(int gridHeight);
-
 	bool DoesBlockFit(const int* grid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity);
-
+	bool isLanded = false;
 
 private:
 	void TransposeTetraminoGrid();
 	void SwapTetraminoBlocks();
+	void TetraminoLanded(int* grid, int gridWidth);
+	
 
 private:
 	olc::vi2d vCurrentTetraminoPos;
@@ -41,8 +39,6 @@ private:
 	olc::vi2d vTetraminoVerticalVelocity = {0,1};
 	olc::vi2d vTetraminoHorizontalLeftVelocity = {-1,0};
 	olc::vi2d vTetraminoHorizontalRightVelocity = {1,0};
-	bool bCanTetraminoBlockMoveDown = true;
-	bool bCanTetraminoBlockMoveLeft = true;
-	bool bCanTetraminoBlockMoveRight = true;
+	
 };
 

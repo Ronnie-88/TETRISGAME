@@ -17,6 +17,10 @@ Tetramino::~Tetramino()
 
 void Tetramino::DrawTertramino(olc::PixelGameEngine* gameInstance, olc::Decal* tetrisBlockDecal)
 {
+    if (isLanded)
+    {
+        return;
+    }
     for (int y = 0; y < gridNSize; y++)
     {
         for (int x = 0; x < gridNSize; x++)
@@ -27,7 +31,7 @@ void Tetramino::DrawTertramino(olc::PixelGameEngine* gameInstance, olc::Decal* t
                 gameInstance->DrawDecal(olc::vi2d(vCurrentTetraminoPos.x + x, vCurrentTetraminoPos.y + y) * vTetrisBlockSize, tetrisBlockDecal, { 0.025f,0.025f }, olc::DARK_BLUE);
                 break;
             case 5:
-                gameInstance->DrawDecal(olc::vi2d(vCurrentTetraminoPos.x+x, vCurrentTetraminoPos.y + y) * vTetrisBlockSize, tetrisBlockDecal, { 0.025f,0.025f }, olc::CYAN);
+                gameInstance->DrawDecal(olc::vi2d(vCurrentTetraminoPos.x + x, vCurrentTetraminoPos.y + y) * vTetrisBlockSize, tetrisBlockDecal, { 0.025f,0.025f }, olc::CYAN);
                 break;
             }
 
@@ -42,14 +46,23 @@ const olc::vi2d& Tetramino::GetCurrentTetraminoPos()
 
 void Tetramino::MoveTetraminoDown(const float& fElapsedTime, int* grid, int gridWidth, int gridHieght)
 {
-    if (!DoesBlockFit(grid, gridHieght, gridWidth, vTetraminoVerticalVelocity)) { return; }
+    if (isLanded)
+    {
+        return;
+    }
+  
     if (fCurrentWaitTime <= fMaxWaitTime)
     {
         fCurrentWaitTime += fElapsedTime;
     }
     else
     {
-       
+        if (!DoesBlockFit(grid, gridHieght, gridWidth, vTetraminoVerticalVelocity))
+        {
+            TetraminoLanded(grid, gridWidth);
+            isLanded = true;
+            return;
+        }
         fCurrentWaitTime = 0.0f;
         vCurrentTetraminoPos += vTetraminoVerticalVelocity;
         vCurrentGridPos += vTetraminoVerticalVelocity;
@@ -58,7 +71,10 @@ void Tetramino::MoveTetraminoDown(const float& fElapsedTime, int* grid, int grid
 
 void Tetramino::MoveTetraminoLeft(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght)
 {
-   
+    if (isLanded)
+    {
+        return;
+    }
     if (bButtonStatus)
     {
         if (!DoesBlockFit(grid, gridHieght, gridWidth, vTetraminoHorizontalLeftVelocity)) { return; }
@@ -69,6 +85,10 @@ void Tetramino::MoveTetraminoLeft(const bool& bButtonStatus, int* grid, int grid
 
 void Tetramino::MoveTetraminoRight(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght)
 {
+    if (isLanded)
+    {
+        return;
+    }
     if (bButtonStatus)
     {
         if (!DoesBlockFit(grid, gridHieght, gridWidth, vTetraminoHorizontalRightVelocity)) { return; }
@@ -79,6 +99,10 @@ void Tetramino::MoveTetraminoRight(const bool& bButtonStatus, int* grid, int gri
 
 void Tetramino::IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus)
 {
+    if (isLanded)
+    {
+        return;
+    }
     if (bButtonStatus)
     {
         fMaxWaitTime = 0.1f;
@@ -91,6 +115,10 @@ void Tetramino::IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus)
 
 void Tetramino::RotateTetraminoRight(const bool& bButtonStatus)
 {
+    if (isLanded)
+    {
+        return;
+    }
     if (bButtonStatus)
     {
        TransposeTetraminoGrid();
@@ -119,6 +147,10 @@ bool Tetramino::DoesBlockFit(const int* grid, int gridheight, int gridwidth, olc
                     return false;
                 }
                 if ((potentialMovePos.y + y) > gridheight - 2)//base side of grid
+                {
+                    return false;
+                }
+                if (grid[(potentialMovePos.y+y) * gridwidth + (potentialMovePos.x+x)] == 1)//collision with another block
                 {
                     return false;
                 }
@@ -152,6 +184,24 @@ void Tetramino::SwapTetraminoBlocks()
             int temp = tetraminoGrid[i * gridNSize + j];
             tetraminoGrid[i * gridNSize + j] = tetraminoGrid[j * gridNSize + i];
             tetraminoGrid[j * gridNSize + i] = temp;
+        }
+    }
+}
+
+void Tetramino::TetraminoLanded(int* grid, int gridWidth)
+{
+    if (isLanded)
+    {
+        return;
+    }
+    for (int y= 0; y < gridNSize; y++)
+    {
+        for (int x = 0; x < gridNSize; x++)
+        {
+            if (tetraminoGrid[y * gridNSize + x] != 0)
+            {
+                grid[(vCurrentGridPos.y + y) * gridWidth + (vCurrentGridPos.x + x)] = 1;
+            }
         }
     }
 }
