@@ -141,10 +141,14 @@
   <ItemGroup>
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="GameInstance.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="LevelScreen.cpp" />
     <ClCompile Include="Tetramino.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileReader.h" />
+    <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="LevelScreen.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tetramino.h" />
@@ -167,6 +171,7 @@
     </Text>
     <Text Include="L-Block.txt" />
     <Text Include="O-Block.txt" />
+    <Text Include="T-Block.txt" />
     <Text Include="Z-Block.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,8 @@ class GameInstance: public olc::PixelGameEngine
     int* Grid;
     int Cleared = 0;
     Tetramino* tetraminoCurrentblock = nullptr;
-    bool flag = true;
+    //bool flag = true;
+   // void(GameInstance::*GameInstanceFuncPtr)();
 
     olc::Sprite* sprTile;
     olc::Decal* TetrisBlockDecal;
@@ -23,7 +24,7 @@ class GameInstance: public olc::PixelGameEngine
     olc::vi2d vGridPos = {20,0};
     int gridWidth = 15;
     int gridHeight = 35;
-    std::string blockTypes[4] = {"I-Block.txt","L-Block.txt", "O-Block.txt ", "Z-Block.txt"};
+    std::string blockTypes[5] = {"I-Block.txt","L-Block.txt", "O-Block.txt ", "Z-Block.txt","T-Block.txt"};
 
 public:
     GameInstance()
@@ -32,6 +33,7 @@ public:
     }
     ~ GameInstance()
     {
+        //call delete screens
         print();
         delete[] Grid;
         delete sprTile;
@@ -51,6 +53,10 @@ public:
         {
             for (int x = 0; x < gridSizeX; x++)
             {
+                if (y < 10)
+                {
+                    continue;
+                }
                 switch (arr[y * gridSizeX + x])
                 {
                 case 0:
@@ -68,9 +74,9 @@ public:
     }
     void CreateNewBlock()
     {
-        int randomTetramino = rand() % 4;
+        int randomTetramino = rand() % 5;
         
-        if (randomTetramino > 4)
+        if (randomTetramino > 5)
         {
             randomTetramino = 0;
         }
@@ -80,7 +86,6 @@ public:
             ClearALLFullRows();
             delete tetraminoCurrentblock;
             tetraminoCurrentblock = new Tetramino(blockTypes[randomTetramino], { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
-            //flag = false;
         }
     }
 
@@ -138,9 +143,6 @@ public:
     {
         for (int x = 1; x < gridWidth-1; x++)
         {
-            //std::cout << currentRow * (gridWidth) + x;
-            //std::cout << "[" << Grid[currentRow * (gridWidth) + x]<<"] ";
-            //DebugPrintRow(currentRow);
             if (Grid[currentRow * (gridWidth)+x] != 1)
             {
                 return false;
@@ -171,7 +173,6 @@ public:
     bool OnUserCreate() override
     {
         Grid = new int[gridWidth * gridHeight];
-    
         sprTile = new olc::Sprite("TetrisBlock.png");
         TetrisBlockDecal = new olc::Decal(sprTile);
         tetraminoCurrentblock = new Tetramino("Z-Block.txt", { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
@@ -203,13 +204,9 @@ public:
             tetraminoCurrentblock->MoveTetraminoDown(fElapsedTime, Grid, gridWidth, gridHeight);
             tetraminoCurrentblock->MoveTetraminoLeft(GetKey(olc::LEFT).bPressed, Grid, gridWidth, gridHeight);
             tetraminoCurrentblock->MoveTetraminoRight(GetKey(olc::RIGHT).bPressed, Grid, gridWidth, gridHeight);
-            tetraminoCurrentblock->RotateTetraminoRight(GetKey(olc::UP).bPressed);
+            tetraminoCurrentblock->RotateTetraminoRight(GetKey(olc::UP).bPressed,Grid,gridHeight,gridWidth);
             tetraminoCurrentblock->IncreaseTetraminoVerticalVelocity(GetKey(olc::DOWN).bHeld);
             CreateNewBlock();
-            if (GetKey(olc::Z).bPressed)
-            {
-                
-            }
         }
      
         return true;

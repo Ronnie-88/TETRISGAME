@@ -17,14 +17,17 @@ public://Movement routines
 	void MoveTetraminoLeft(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
 	void MoveTetraminoRight(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
 	void IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus);
-	void RotateTetraminoRight(const bool& bButtonStatus);
-	bool DoesBlockFit(const int* grid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity);
+	void RotateTetraminoRight(const bool& bButtonStatus, int* gameGrid, int gridheight, int gridwidth);
+	
 	bool isLanded = false;
 
 private:
-	void TransposeTetraminoGrid();
-	void SwapTetraminoBlocks();
+	bool DoesBlockFit(const int* currentGrid, const int* gameGrid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity);
+	bool DoesRotatedBlockFit(const int* gameGrid, int gridheight, int gridwidth);
+	void TransposeTetraminoGrid(int* grid);
+	void SwapTetraminoBlocks(int* grid);
 	void TetraminoLanded(int* grid, int gridWidth);
+	void FillTempGrid(int* tempGrid, int* currentGrid);
 	
 
 private:
