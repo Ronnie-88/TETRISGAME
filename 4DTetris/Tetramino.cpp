@@ -127,6 +127,11 @@ void Tetramino::RotateTetraminoRight(const bool& bButtonStatus,int* gameGrid, in
    
 }
 
+const bool& Tetramino::IsTetraminoLanded()
+{
+    return isLanded;
+}
+
 bool Tetramino::DoesBlockFit(const int* currentGrid,const int* gameGrid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity)
 {
     olc::vi2d potentialMovePos = { 0,0 };

@@ -5,12 +5,13 @@ class GameScreen
 {
 public:
 	GameScreen();
-	~GameScreen();
+	virtual ~GameScreen();
 
-	virtual void ShowScreen();//shows the current screen to display
-	virtual void RemoveScreen();
+	virtual void InitScreen();
+	virtual void UpdateScreen(olc::PixelGameEngine* gameInstance, const float& fElapsedTime);//shows the current screen to display
+	void RemoveScreen();//removes the current screen from display
 
-private:
-
+protected:
+	bool CanDisplayScreen = true;
 };
 

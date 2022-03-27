@@ -140,15 +140,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="LevelScreen.cpp" />
+    <ClCompile Include="MenuScreen.cpp" />
     <ClCompile Include="Tetramino.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileReader.h" />
+    <ClInclude Include="GameInstance.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="LevelScreen.h" />
+    <ClInclude Include="MenuScreen.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tetramino.h" />
