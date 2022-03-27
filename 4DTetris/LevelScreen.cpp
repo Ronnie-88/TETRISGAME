@@ -1,5 +1,5 @@
 #include "LevelScreen.h"
-
+#include "GameInstance.h"
 LevelScreen::LevelScreen()
 {
 	int girdSize = gridWidth * gridHeight;
@@ -10,6 +10,7 @@ LevelScreen::LevelScreen()
 
 LevelScreen::~LevelScreen()
 {
+	print();
 	delete[] Grid;
 	delete sprTile;
 	delete TetrisBlockDecal;
@@ -23,11 +24,12 @@ LevelScreen::~LevelScreen()
 
 
 
-void LevelScreen::UpdateScreen(olc::PixelGameEngine* gameInstance, const float& fElapsedTime)//called in onuserupdate
+void LevelScreen::UpdateScreen(GameInstance* gameInstance, const float& fElapsedTime)//called in onuserupdate
 {
 	if (!CanDisplayScreen) { return; }
 	DrawLevelGrid(gameInstance);
 	CreateNewBlock();
+	TriggerGameOver(gameInstance);
 	//Handle Tetramino block routines
 	if (!tetraminoCurrentblock) { return; }
 
@@ -37,7 +39,6 @@ void LevelScreen::UpdateScreen(olc::PixelGameEngine* gameInstance, const float& 
 	tetraminoCurrentblock->MoveTetraminoRight(gameInstance->GetKey(olc::RIGHT).bPressed, Grid, gridWidth, gridHeight);
 	tetraminoCurrentblock->RotateTetraminoRight(gameInstance->GetKey(olc::UP).bPressed, Grid, gridHeight, gridWidth);
 	tetraminoCurrentblock->IncreaseTetraminoVerticalVelocity(gameInstance->GetKey(olc::DOWN).bHeld);
-	
 }
 
 void LevelScreen::InitScreen()
@@ -46,7 +47,7 @@ void LevelScreen::InitScreen()
 }
 
 
-void LevelScreen::InitGrid()//called in onusercreate
+void LevelScreen::InitGrid()
 {
 	for (int y = 0; y < gridHeight; y++)
 	{
@@ -64,13 +65,13 @@ void LevelScreen::InitGrid()//called in onusercreate
 	}
 }
 
-void LevelScreen::DrawLevelGrid(olc::PixelGameEngine* gameInstance)
+void LevelScreen::DrawLevelGrid(GameInstance* gameInstance)
 {
 	for (int y = 0; y < gridHeight; y++)
 	{
 		for (int x = 0; x < gridWidth; x++)
 		{
-			if (y < 10)
+			if (y < 3)
 			{
 				continue;
 			}
@@ -104,11 +105,11 @@ void LevelScreen::CreateNewBlock()
 		if (!tetraminoCurrentblock->IsTetraminoLanded()) { return; }
 		ClearALLFullRows();
 		delete tetraminoCurrentblock;
-		tetraminoCurrentblock = new Tetramino(blockTypes[randomTetramino], { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
+		tetraminoCurrentblock = new Tetramino(blockTypes[randomTetramino], { (vGridPos.x + gridWidth / 2),vGridPos.y }, { (gridWidth / 2),0 });
 	}
 	else
 	{
-		tetraminoCurrentblock = new Tetramino(blockTypes[randomTetramino], { (vGridPos.x + gridWidth / 2),0 }, { (gridWidth / 2),0 });
+		tetraminoCurrentblock = new Tetramino(blockTypes[randomTetramino], { (vGridPos.x + gridWidth / 2),vGridPos.y }, { (gridWidth / 2),0 });
 	}
 }
 
@@ -176,6 +177,12 @@ bool LevelScreen::IsRowFilled(const int& currentRow)
 	return true;
 }
 
+void LevelScreen::TriggerGameOver(GameInstance* gameInstance)
+{
+	if (IsRowEmpty(3)) {return;}
+	gameInstance->SwitchScreen(gameInstance->GetGameOverLevel());
+}
+
 //The following methods should be defined for debug purposes only
 
 
@@ -188,7 +195,7 @@ bool LevelScreen::IsRowFilled(const int& currentRow)
    }*/
 
 
-   /*  void print()
+     void LevelScreen::print()
 	 {
 		 for (int y = 0;  y < gridHeight;  y++)
 		 {
@@ -199,4 +206,4 @@ bool LevelScreen::IsRowFilled(const int& currentRow)
 			 }
 		 }
 		 std::cout << "\n";
-	 }*/
+	 }

@@ -1,9 +1,9 @@
 
 // EntryPoint.cpp : This file contains the 'main' function. Program execution begins and ends there.
 #define OLC_PGE_APPLICATION
+#include "ScreenDimensions.h"
 #include "GameInstance.h"
-#define SCREEN_WIDTH 500
-#define SCREEN_HIEGHT 415
+
 
 int main()
 {

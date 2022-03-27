@@ -1,6 +1,7 @@
 #pragma once
-#include "FileReader.h"
 #include "olcPixelGameEngine.h"
+#include "FileReader.h"
+class GameInstance;
 
 class Tetramino
 {
@@ -9,7 +10,7 @@ public://Tetramino construction
 	~Tetramino();
 
 public://Drawing routines
-	void DrawTertramino(olc::PixelGameEngine* gameInstance , olc::Decal* tetrisBlockDecal);
+	void DrawTertramino(GameInstance* gameInstance , olc::Decal* tetrisBlockDecal);
 	const olc::vi2d& GetCurrentTetraminoPos();
 
 public://Movement routines

@@ -1,5 +1,5 @@
 #include "Tetramino.h"
-
+#include"GameInstance.h"
 Tetramino::Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos)
     : vCurrentTetraminoPos(vCurrentTetraminoPos), vCurrentGridPos(vCurrentGridPos)
 {
@@ -15,7 +15,7 @@ Tetramino::~Tetramino()
 	delete[] tetraminoGrid;
 }
 
-void Tetramino::DrawTertramino(olc::PixelGameEngine* gameInstance, olc::Decal* tetrisBlockDecal)
+void Tetramino::DrawTertramino(GameInstance* gameInstance, olc::Decal* tetrisBlockDecal)
 {
     if (isLanded)
     {
