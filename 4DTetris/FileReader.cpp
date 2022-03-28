@@ -8,7 +8,11 @@
 
     FileReader::~FileReader()
     {
-        delete blockCoordsFile;
+        if (blockCoordsFile)
+        {
+           delete blockCoordsFile;
+        }
+       
     }
 
     void FileReader::AddCoordsToBlock(int* arr, const int arraySize)
