@@ -10,7 +10,7 @@ LevelScreen::LevelScreen()
 
 LevelScreen::~LevelScreen()
 {
-	print();
+	//print();
 	delete[] Grid;
 	delete sprTile;
 	delete TetrisBlockDecal;
@@ -221,15 +221,15 @@ void LevelScreen::GetRandomTetramino()
 
 //The following method should be defined for debug purposes only
 
-     void LevelScreen::print()
-	 {
-		 for (int y = 0;  y < gridHeight;  y++)
-		 {
-			 std::cout << "\n";
-			 for (int x = 0; x < gridWidth; x++)
-			 {
-				 std::cout << "[" << Grid[y * gridWidth + x] << "] ";
-			 }
-		 }
-		 std::cout << "\n";
-	 }
+  //   void LevelScreen::print()
+	 //{
+		// for (int y = 0;  y < gridHeight;  y++)
+		// {
+		//	 std::cout << "\n";
+		//	 for (int x = 0; x < gridWidth; x++)
+		//	 {
+		//		 std::cout << "[" << Grid[y * gridWidth + x] << "] ";
+		//	 }
+		// }
+		// std::cout << "\n";
+	 //}
