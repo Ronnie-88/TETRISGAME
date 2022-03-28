@@ -11,7 +11,7 @@ public:
 	void UpdateScreen(GameInstance* gameInstance, const float& fElapsedTime)override;
 	void DrawTitleAndCredits(GameInstance* gameInstance);
 	void DrawButton(GameInstance* gameInstance, const bool& hoverState);
-	void InitScreen() override;
+	void InitScreen(GameInstance* gameInstance) override;
 	const bool& IsMouseHovering();
 	void OnMouseButtonClicked(GameInstance* gameInstance, const bool& bMouseHoverstatus);
 private:

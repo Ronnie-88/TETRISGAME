@@ -6,7 +6,6 @@ MenuScreen::MenuScreen()
 {
 	buttonPos = { (SCREEN_WIDTH / 2) - 50,200 };
 	buttonSize = { 100,50 };
-	//InitScreen();
 }
 
 MenuScreen::~MenuScreen()
@@ -47,7 +46,7 @@ void MenuScreen::DrawButton(GameInstance* gameInstance, const bool& hoverState)
 	}
 }
 
-void MenuScreen::InitScreen()
+void MenuScreen::InitScreen(GameInstance* gameInstance)
 {
 	
 }

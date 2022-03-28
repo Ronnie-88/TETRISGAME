@@ -1,12 +1,18 @@
 #include "Tetramino.h"
 #include"GameInstance.h"
-Tetramino::Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos)
-    : vCurrentTetraminoPos(vCurrentTetraminoPos), vCurrentGridPos(vCurrentGridPos)
+Tetramino::Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos,float fDefaultMaxWaitTime,float fStompWaitTime,const int& inverseSide)
+    : vCurrentTetraminoPos(vCurrentTetraminoPos), vCurrentGridPos(vCurrentGridPos), fDefaultMaxWaitTime(fDefaultMaxWaitTime), fStompWaitTime(fStompWaitTime)
 {
 	tetraminoBlockType = new FileReader(blockTypeFile);
     int girdSize = gridNSize * gridNSize;
 	tetraminoGrid = new int[girdSize];
 	tetraminoBlockType->AddCoordsToBlock(tetraminoGrid, gridNSize * gridNSize);
+    fMaxWaitTime = this->fDefaultMaxWaitTime;
+    if (inverseSide == 1)
+    {
+        SwapTetraminoBlocks(tetraminoGrid);
+    }
+    
 }
 
 Tetramino::~Tetramino()
@@ -105,11 +111,11 @@ void Tetramino::IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus)
     }
     if (bButtonStatus)
     {
-        fMaxWaitTime = 0.1f;
+        fMaxWaitTime = fStompWaitTime;
     }
     else
     {
-        fMaxWaitTime = 1.0f;
+        fMaxWaitTime = fDefaultMaxWaitTime;
     }
 }
 

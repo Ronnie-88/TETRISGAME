@@ -6,7 +6,8 @@ class GameInstance;
 class Tetramino
 {
 public://Tetramino construction
-	Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos);
+	Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos, 
+		float fDefaultMaxWaitTime, float fStompWaitTime,const int& inverseSide);
 	~Tetramino();
 
 public://Drawing routines
@@ -20,9 +21,6 @@ public://Movement routines
 	void IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus);
 	void RotateTetraminoRight(const bool& bButtonStatus, int* gameGrid, int gridheight, int gridwidth);
 	const bool& IsTetraminoLanded();
-	
-	
-
 private:
 	bool DoesBlockFit(const int* currentGrid, const int* gameGrid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity);
 	bool DoesRotatedBlockFit(const int* gameGrid, int gridheight, int gridwidth);
@@ -39,8 +37,10 @@ private:
 	int* tetraminoGrid = nullptr;
 	const unsigned int gridNSize = 4;
 	olc::vi2d vTetrisBlockSize = {7,7};
-	float fCurrentWaitTime = 0.0f; 
-	float fMaxWaitTime = 1.0f;
+	float fCurrentWaitTime = 0.0f;
+	float fMaxWaitTime;
+	float fDefaultMaxWaitTime;
+	float fStompWaitTime;
 	olc::vi2d vTetraminoVerticalVelocity = {0,1};
 	olc::vi2d vTetraminoHorizontalLeftVelocity = {-1,0};
 	olc::vi2d vTetraminoHorizontalRightVelocity = {1,0};

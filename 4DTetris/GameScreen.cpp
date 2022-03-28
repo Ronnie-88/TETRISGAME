@@ -9,7 +9,7 @@ GameScreen::~GameScreen()
 }
 
 
-void GameScreen::InitScreen()//called in onusercreate
+void GameScreen::InitScreen(GameInstance* gameInstance)//called in onusercreate
 {
 }
 

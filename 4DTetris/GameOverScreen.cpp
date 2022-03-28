@@ -26,7 +26,7 @@ void GameOverScreen::DrawGameOverAndScore(GameInstance* gameInstance)
 	int xCoord = (SCREEN_WIDTH - gameInstance->GetTextSize(TitleText).x) / 2;
 	int xCorrd2 = (SCREEN_WIDTH - gameInstance->GetTextSize(ScoreText + std::to_string(1000)).x) / 2;
 	gameInstance->DrawStringDecal(olc::vi2d{ (xCoord - 150),100 }, TitleText, olc::WHITE, olc::vf2d{ 5.0f,10.0f });
-	gameInstance->DrawStringDecal(olc::vi2d{ (xCorrd2-50),200 }, ScoreText+std::to_string(1000), olc::BLACK, olc::vf2d{ 1.5f,1.7f });
+	gameInstance->DrawStringDecal(olc::vi2d{ (xCorrd2-50),200 }, ScoreText+std::to_string(gameInstance->GetCurrentScore()), olc::BLACK, olc::vf2d{ 1.5f,1.7f });
 }
 
 void GameOverScreen::DrawButton(GameInstance* gameInstance, const bool& hoverState)
@@ -45,9 +45,8 @@ void GameOverScreen::DrawButton(GameInstance* gameInstance, const bool& hoverSta
 	}
 }
 
-void GameOverScreen::InitScreen()
+void GameOverScreen::InitScreen(GameInstance* gameInstance)
 {
-	//set the score achieved
 }
 
 const bool& GameOverScreen::IsMouseHovering()

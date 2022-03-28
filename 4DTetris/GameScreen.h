@@ -8,10 +8,10 @@ public:
 	GameScreen();
 	virtual ~GameScreen();
 public:
-	virtual void InitScreen();
+	virtual void InitScreen(GameInstance* gameInstance);
 	virtual void UpdateScreen(GameInstance* gameInstance, const float& fElapsedTime);//shows the current screen to display
-	void ShowScreen();
-	void RemoveScreen();//removes the current screen from display
+	virtual void ShowScreen();
+	virtual void RemoveScreen();//removes the current screen from display
 
 protected:
 	bool CanDisplayScreen = false;
