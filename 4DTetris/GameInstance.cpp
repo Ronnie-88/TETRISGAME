@@ -47,17 +47,17 @@ void GameInstance::SwitchScreen(GameScreen* newScreen)
 	currentScreenToDisplay->ShowScreen();
 }
 
-GameScreen* GameInstance::GetGameLevel()
+GameScreen* GameInstance::GetGameLevel()const
 {
 	return gameLevel;
 }
 
-GameScreen* GameInstance::GetMenuLevel()
+GameScreen* GameInstance::GetMenuLevel()const
 {
 	return menuLevel;
 }
 
-GameScreen* GameInstance::GetGameOverLevel()
+GameScreen* GameInstance::GetGameOverLevel()const
 {
 	return gameOverScreen;
 }
@@ -79,12 +79,12 @@ void GameInstance::AddToScore(const int& numOfLinesCleared)
 	this->numOfLinesCleared += numOfLinesCleared;
 }
 
-const int& GameInstance::GetCurrentScore()
+const int& GameInstance::GetCurrentScore()const
 {
 	return currentScore;
 }
 
-const int& GameInstance::GetNumOfLinesCleared()
+const int& GameInstance::GetNumOfLinesCleared()const
 {
 	return numOfLinesCleared;
 }

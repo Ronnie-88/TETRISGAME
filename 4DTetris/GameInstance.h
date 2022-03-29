@@ -13,12 +13,12 @@ public:
 	bool OnUserCreate() override;
 	bool OnUserUpdate(float fElapsedTime) override;
 	void SwitchScreen(GameScreen* newScreen);
-	GameScreen* GetGameLevel();
-	GameScreen* GetMenuLevel();
-	GameScreen* GetGameOverLevel();
+	GameScreen* GetGameLevel()const;
+	GameScreen* GetMenuLevel()const;
+	GameScreen* GetGameOverLevel()const;
 	void AddToScore(const int& numOfLinesCleared);
-	const int& GetCurrentScore();
-	const int& GetNumOfLinesCleared();
+	const int& GetCurrentScore()const;
+	const int& GetNumOfLinesCleared()const;
 	void ResetScoreAndLines();
 private:
 	GameScreen* currentScreenToDisplay = nullptr;
