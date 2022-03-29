@@ -11,6 +11,6 @@ public:
     FileReader(const std::string& fileName);
     ~FileReader();
 
-    void AddCoordsToBlock(int* arr, const int arraySize);
+    void AddCoordsToBlock(int* arr, const int& arraySize);
 };
 
