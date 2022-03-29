@@ -11,16 +11,16 @@ public:
 	void InitScreen(GameInstance* gameInstance) override;
 	void InitGrid();
 private:
-	void DrawLevelGrid(GameInstance* gameInstance);
+	void DrawLevelGrid(GameInstance* gameInstance)const;
 	void CreateNewBlock(GameInstance* gameInstance);
-	void DrawTempTetramino(GameInstance* gameInstance);
+	void DrawTempTetramino(GameInstance* gameInstance)const;
 	void ClearALLFullRows();
-	bool IsRowEmpty(const int& currentRow);
+	const bool& IsRowEmpty(const int& currentRow)const;
 	void ClearRow(const int& currentRow);
 	void MoveRowsDown(const int& currentRow, const int& numOfRowsCleared);
-	bool IsRowFilled(const int& currentRow);
-	void TriggerGameOver(GameInstance* gameInstance);
-	void DrawScoreAndLinesCleared(GameInstance* gameInstance);
+	const bool& IsRowFilled(const int& currentRow)const;
+	void TriggerGameOver(GameInstance* gameInstance)const;
+	void DrawScoreAndLinesCleared(GameInstance* gameInstance)const;
 	void DecreaseTetraminoSpeed();
 	void GetRandomTetramino();
 	void print();

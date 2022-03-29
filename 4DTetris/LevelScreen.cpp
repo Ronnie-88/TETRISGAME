@@ -15,10 +15,7 @@ LevelScreen::~LevelScreen()
 	delete sprTile;
 	delete TetrisBlockDecal;
 
-	if (tetraminoCurrentblock)
-	{
-		delete tetraminoCurrentblock;
-	}
+	if (tetraminoCurrentblock) { delete tetraminoCurrentblock; }
 
 	std::cout << "LevelClosed" << std::endl;
 }
@@ -72,16 +69,14 @@ void LevelScreen::InitGrid()
 	}
 }
 
-void LevelScreen::DrawLevelGrid(GameInstance* gameInstance)
+void LevelScreen::DrawLevelGrid(GameInstance* gameInstance)const
 {
 	for (int y = 0; y < gridHeight; y++)
 	{
 		for (int x = 0; x < gridWidth; x++)
 		{
-			if (y < 3)
-			{
-				continue;
-			}
+			if (y < 3) {continue;}
+
 			switch (Grid[y * gridWidth + x])
 			{
 			case 0:
@@ -122,7 +117,7 @@ void LevelScreen::CreateNewBlock(GameInstance* gameInstance)
 	}
 }
 
-void LevelScreen::DrawTempTetramino(GameInstance* gameInstance)
+void LevelScreen::DrawTempTetramino(GameInstance* gameInstance) const
 {
 	Tetramino temp = Tetramino(blockTypes[randomTetramino], { (vGridPos.x+gridWidth)+6,(vGridPos.y+(gridHeight/2))+4}, { (gridWidth / 2),gridHeight / 2 },
 		0.0f, 0.0f, randomInvertTetramino);
@@ -135,10 +130,8 @@ void LevelScreen::ClearALLFullRows()
 	for (int y = gridHeight - 2; y >= 0; y--)
 	{
 		//if empty row then don't check
-		if (IsRowEmpty(y))
-		{
-			continue;
-		}
+		if (IsRowEmpty(y))	{continue;}
+
 		if (IsRowFilled(y))
 		{
 			NumOfClearedRows++;
@@ -151,14 +144,11 @@ void LevelScreen::ClearALLFullRows()
 	}
 }
 
-bool LevelScreen::IsRowEmpty(const int& currentRow)
+const bool& LevelScreen::IsRowEmpty(const int& currentRow) const
 {
 	for (int x = 1; x < gridWidth - 1; x++)
 	{
-		if (Grid[currentRow * (gridWidth)+x] != 0)
-		{
-			return false;
-		}
+		if (Grid[currentRow * (gridWidth)+x] != 0) { return false; }
 	}
 	return true;
 }
@@ -181,25 +171,22 @@ void LevelScreen::MoveRowsDown(const int& currentRow, const int& numOfRowsCleare
 	}
 }
 
-bool LevelScreen::IsRowFilled(const int& currentRow)
+const bool& LevelScreen::IsRowFilled(const int& currentRow)const
 {
 	for (int x = 1; x < gridWidth - 1; x++)
 	{
-		if (Grid[currentRow * (gridWidth)+x] != 1)
-		{
-			return false;
-		}
+		if (Grid[currentRow * (gridWidth)+x] != 1) { return false; }
 	}
 	return true;
 }
 
-void LevelScreen::TriggerGameOver(GameInstance* gameInstance)
+void LevelScreen::TriggerGameOver(GameInstance* gameInstance)const
 {
 	if (IsRowEmpty(3)) {return;}
 	gameInstance->SwitchScreen(gameInstance->GetGameOverLevel());
 }
 
-void LevelScreen::DrawScoreAndLinesCleared(GameInstance* gameInstance)
+void LevelScreen::DrawScoreAndLinesCleared(GameInstance* gameInstance) const
 {
 	gameInstance->DrawStringDecal(vScoreTextPos,scoreText+ std::to_string(gameInstance->GetCurrentScore()));
 	gameInstance->DrawStringDecal(vScoreTextPos + olc::vi2d{0,15}, clearedLinesText + std::to_string(gameInstance->GetNumOfLinesCleared()));
