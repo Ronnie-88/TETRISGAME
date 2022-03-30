@@ -142,32 +142,27 @@ const bool& Tetramino::DoesBlockFit(const int* currentGrid, const int* gameGrid,
 				{
 					canBlockFit = false;
 					return canBlockFit;
-					//return !canBlockFit;
 				}
 				if ((potentialMovePos.x + x) > (gridwidth - 2))//right side of grid
 				{
 					canBlockFit = false;
 					return canBlockFit;
-					//return !canBlockFit;
 				}
 				if ((potentialMovePos.y + y) > (gridheight - 2))//base of grid
 				{
 					canBlockFit = false;
 					return canBlockFit;
-					//return !canBlockFit;
 				}
 				if (gameGrid[(potentialMovePos.y + y) * (gridwidth)+(potentialMovePos.x + x)] == 1)//collision with another block
 				{
 					canBlockFit = false;
 					return canBlockFit;
-					//return !canBlockFit;
 				}
 			}
 		}
 	}
 	canBlockFit = true;
 	return canBlockFit;
-	//return canBlockFit;
 }
 
 const bool& Tetramino::DoesRotatedBlockFit(const int* gameGrid, const int& gridheight, const int& gridwidth)
