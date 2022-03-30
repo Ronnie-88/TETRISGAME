@@ -163,7 +163,6 @@ const bool& Tetramino::DoesBlockFit(const int* currentGrid, const int* gameGrid,
 					//return canBlockFit;
 				}
 			}
-
 		}
 	}
 	canBlockFit = true;
