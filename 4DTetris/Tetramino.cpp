@@ -154,13 +154,13 @@ const bool& Tetramino::DoesBlockFit(const int* currentGrid, const int* gameGrid,
 				{
 					canBlockFit = false;
 					return canBlockFit;
-					//return canBlockFit;
+					//return !canBlockFit;
 				}
 				if (gameGrid[(potentialMovePos.y + y) * (gridwidth)+(potentialMovePos.x + x)] == 1)//collision with another block
 				{
 					canBlockFit = false;
 					return canBlockFit;
-					//return canBlockFit;
+					//return !canBlockFit;
 				}
 			}
 		}
