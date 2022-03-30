@@ -68,11 +68,11 @@ void GameInstance::AddToScore(const int& numOfLinesCleared)
 	{
 		currentScore += 15;
 	}
-	else if(numOfLinesCleared > 0 && numOfLinesCleared < 4)//award points for clearing less than 4 lines 
+	else if (numOfLinesCleared > 0 && numOfLinesCleared < 4)//award points for clearing less than 4 lines 
 	{
 		currentScore += 100;
 	}
-	else if(numOfLinesCleared >= 4)//Tetris Baby!!!
+	else if (numOfLinesCleared >= 4)//Tetris Baby!!!
 	{
 		currentScore += 800;
 	}

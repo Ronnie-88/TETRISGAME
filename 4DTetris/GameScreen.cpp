@@ -13,7 +13,7 @@ void GameScreen::InitScreen(GameInstance* gameInstance)//called in onusercreate
 {
 }
 
-void GameScreen::UpdateScreen(GameInstance* gameInstance,const float& fElapsedTime)
+void GameScreen::UpdateScreen(GameInstance* gameInstance, const float& fElapsedTime)
 {
 }
 

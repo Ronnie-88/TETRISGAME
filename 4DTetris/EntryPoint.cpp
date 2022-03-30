@@ -14,11 +14,11 @@ https://www.youtube.com/c/javidx9
 
 int main()
 {
-    GameInstance Gi;
+	GameInstance Gi;
 
-    if (Gi.Construct(SCREEN_WIDTH, SCREEN_HIEGHT,2,2))
-    {
-        Gi.Start();
-    }
+	if (Gi.Construct(SCREEN_WIDTH, SCREEN_HIEGHT, 2, 2))
+	{
+		Gi.Start();
+	}
 }
 

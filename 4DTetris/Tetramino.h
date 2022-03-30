@@ -7,23 +7,23 @@ class Tetramino
 {
 public://Tetramino construction
 	Tetramino(const std::string& blockTypeFile, const olc::vi2d& vCurrentTetraminoPos, const olc::vi2d& vCurrentGridPos, 
-		float fDefaultMaxWaitTime, float fStompWaitTime,const int& inverseSide);
+		const float& fDefaultMaxWaitTime, const float& fStompWaitTime,const int& inverseSide);
 	~Tetramino();
 
 public://Drawing routines
 	void DrawTertramino(GameInstance* gameInstance , olc::Decal* tetrisBlockDecal);
-	const olc::vi2d& GetCurrentTetraminoPos();
+	const olc::vi2d& GetCurrentTetraminoPos() const;
 
 public://Movement routines
-	void MoveTetraminoDown(const float& fElapsedTime, int* grid, int gridWidth, int gridHieght);
-	void MoveTetraminoLeft(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
-	void MoveTetraminoRight(const bool& bButtonStatus, int* grid, int gridWidth, int gridHieght);
+	void MoveTetraminoDown(const float& fElapsedTime,int* grid, const int& gridWidth, const int& gridHieght);
+	void MoveTetraminoLeft(const bool& bButtonStatus, int* grid, const int& gridWidth, const int& gridHieght);
+	void MoveTetraminoRight(const bool& bButtonStatus, int* grid, const int& gridWidth, const int& gridHieght);
 	void IncreaseTetraminoVerticalVelocity(const bool& bButtonStatus);
-	void RotateTetraminoRight(const bool& bButtonStatus, int* gameGrid, int gridheight, int gridwidth);
-	const bool& IsTetraminoLanded();
+	void RotateTetraminoRight(const bool& bButtonStatus, int* gameGrid, const int& gridheight, const int& gridwidth);
+	const bool& IsTetraminoLanded() const;
 private:
-	bool DoesBlockFit(const int* currentGrid, const int* gameGrid, int gridheight, int gridwidth, olc::vi2d potentialMoveVelocity);
-	bool DoesRotatedBlockFit(const int* gameGrid, int gridheight, int gridwidth);
+	const bool& DoesBlockFit(const int* currentGrid, const int* gameGrid, const int& gridheight, const int& gridwidth, const olc::vi2d& potentialMoveVelocity);
+	const bool& DoesRotatedBlockFit(const int* gameGrid, const int& gridheight, const int& gridwidth);
 	void TransposeTetraminoGrid(int* grid);
 	void SwapTetraminoBlocks(int* grid);
 	void TetraminoLanded(int* grid, int gridWidth);
@@ -45,6 +45,7 @@ private:
 	olc::vi2d vTetraminoHorizontalLeftVelocity = {-1,0};
 	olc::vi2d vTetraminoHorizontalRightVelocity = {1,0};
 	bool isLanded = false;
-	
+	bool canBlockFit = true;
+	bool canRotatedBlockFit = true;
 };
 
