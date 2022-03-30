@@ -7,11 +7,11 @@ public:
 	~GameOverScreen();
 public:
 	void UpdateScreen(GameInstance* gameInstance, const float& fElapsedTime)override;
-	void DrawGameOverAndScore(GameInstance* gameInstance);
-	void DrawButton(GameInstance* gameInstance, const bool& hoverState);
+	void DrawGameOverAndScore(GameInstance* gameInstance)const;
+	void DrawButton(GameInstance* gameInstance, const bool& hoverState)const;
 	void InitScreen(GameInstance* gameInstance) override;
-	const bool& IsMouseHovering();
-	void OnMouseButtonClicked(GameInstance* gameInstance, const bool& bMouseHoverstatus);
+	const bool& IsMouseHovering()const;
+	void OnMouseButtonClicked(GameInstance* gameInstance, const bool& bMouseHoverstatus)const;
 private:
 	olc::vi2d buttonPos;
 	olc::vi2d buttonSize;

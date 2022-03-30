@@ -21,7 +21,7 @@ void GameOverScreen::UpdateScreen(GameInstance* gameInstance, const float& fElap
 	OnMouseButtonClicked(gameInstance, IsMouseHovering());
 }
 
-void GameOverScreen::DrawGameOverAndScore(GameInstance* gameInstance)
+void GameOverScreen::DrawGameOverAndScore(GameInstance* gameInstance) const
 {
 	int xCoord = (SCREEN_WIDTH - gameInstance->GetTextSize(TitleText).x) / 2;
 	int xCorrd2 = (SCREEN_WIDTH - gameInstance->GetTextSize(ScoreText + std::to_string(1000)).x) / 2;
@@ -29,7 +29,7 @@ void GameOverScreen::DrawGameOverAndScore(GameInstance* gameInstance)
 	gameInstance->DrawStringDecal(olc::vi2d{ (xCorrd2-50),200 }, ScoreText+std::to_string(gameInstance->GetCurrentScore()), olc::BLACK, olc::vf2d{ 1.5f,1.7f });
 }
 
-void GameOverScreen::DrawButton(GameInstance* gameInstance, const bool& hoverState)
+void GameOverScreen::DrawButton(GameInstance* gameInstance, const bool& hoverState)const
 {
 	int xCoord = ((buttonPos.x + buttonSize.x) - gameInstance->GetTextSize(MenuButtonText).x) / 2;
 	if (hoverState)
@@ -49,18 +49,15 @@ void GameOverScreen::InitScreen(GameInstance* gameInstance)
 {
 }
 
-const bool& GameOverScreen::IsMouseHovering()
+const bool& GameOverScreen::IsMouseHovering()const
 {
 	return mousePos.x > buttonPos.x && mousePos.x < (buttonPos.x + buttonSize.x) &&
 		mousePos.y > buttonPos.y && mousePos.y < (buttonPos.y + buttonSize.y);
 }
 
-void GameOverScreen::OnMouseButtonClicked(GameInstance* gameInstance, const bool& bMouseHoverstatus)
+void GameOverScreen::OnMouseButtonClicked(GameInstance* gameInstance, const bool& bMouseHoverstatus)const
 {
 	if (!bMouseHoverstatus) { return; }
 
-	if (gameInstance->GetMouse(0).bPressed)
-	{
-		gameInstance->SwitchScreen(gameInstance->GetMenuLevel());
-	}
+	if (gameInstance->GetMouse(0).bPressed) { gameInstance->SwitchScreen(gameInstance->GetMenuLevel()); }
 }
